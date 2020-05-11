@@ -19,5 +19,5 @@ interface TextAreaProps extends Omit<HTMLInputProps, "onChange">, InitialFastInp
 }
 
 
-export const FastInput = (props: InputProps) => <FastInputMultiElement {...props} elementType="input" />;
-export const FastTextArea = (props: TextAreaProps) => <FastInputMultiElement {...props} elementType="textarea" />;
+export const Input = (props: InputProps) => <FastInputMultiElement {...props} elementType="input" />;
+export const TextArea = (props: TextAreaProps) => <FastInputMultiElement {...props} elementType="textarea" />;

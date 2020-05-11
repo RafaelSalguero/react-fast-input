@@ -1,4 +1,4 @@
-import { assertUnreachable, delay } from "keautils";
+import { assertUnreachable, delay } from "simple-pure-utils";
 
 /**Si el valor proviene de los props o del ref */
 type ValueOrigin = "props" | "ref";
