@@ -1,6 +1,7 @@
 import { InputState } from "./types";
 import { remove, insert } from "./basic";
 import { replaceAll } from "./replace";
+import { regexMask, MaskItem } from "./regex-mask";
 
 function charMatches(regex: string | RegExp | undefined, sourceChar: string) {
     if (regex == null)
@@ -22,39 +23,43 @@ function isStarMask(mask: string): boolean {
 /**Devuelve el patron de un caracter de la máscara, puede ser un regex para los comodines 
  * o una cadena fija
  */
-function getCharRegex(c: string): RegExp | string {
-    return c == "#" ? /\d/ :
-        c == "A" ? /[a-zñáú]/i :
-            c == "S" ? /[fm]/i :
-            c == "N" ? /[a-zñáú\s]/i :
-                c == "@" ? /[a-zñáú\d]/i :
-                    c == "." ? /./ :
-                        c;
+function getCharRegex(c: string) {
+    return c == "#" ? /^\d$/ :
+        c == "A" ? /^[a-zñáú]$/i :
+            c == "S" ? /^[fm]$/i :
+                c == "N" ? /^[a-zñáú\s]$/i :
+                    c == "@" ? /^[a-zñáú\d]$/i :
+                        c == "." ? /^.$/ :
+                            c;
 }
 
 /**Aplica una mascara de repetición */
 function starMask(source: InputState, mask: RegExp): InputState {
     const patt = new RegExp("(?!" + mask.source + ").", mask.flags);
-    const ret =  replaceAll(source, patt, "", false);
+    const ret = replaceAll(source, patt, "", false);
     return ret;
 }
 
 
-/**Aplica una mascara, la mascara tiene los sig. caracteres especiales:
- * # = numero
- * A = Letra
- * N = Letra o espacio
- * @ = Letra o numero
- * . = Cualquier caracter
- * 
- * Se puede poner un asterisco al final de la mascara para que se repita. 
- * Ej.
- * N* = Repetición de letra o espacio
- * 
- * 
- * Cualquier otro caracter es un caracter fijo
- */
+
 export function mask(source: InputState, mask: string): InputState {
+
+    const rmask = mask.split("").map<MaskItem>(x => {
+        const rc = getCharRegex(x);
+        const regex = typeof (rc) == "string" ? new RegExp("^\\" + rc + "$") : rc;
+        const str = typeof (rc) == "string" ? rc : " ";
+        return {
+             mask: regex,
+             str: str
+        };
+    })
+    return regexMask(source, rmask);
+}
+
+/**Aplica una mascara
+ * @param mask Un regex para una parte variable de la cadena o un string para una parte fija
+*/
+export function regexMask2(source: InputState, mask: (RegExp | string)[]): InputState {
     //Si la cadena es vacia se devuelve vacía
     if (source.text == "") {
         return {
@@ -63,13 +68,6 @@ export function mask(source: InputState, mask: string): InputState {
         }
     }
 
-    if(isStarMask(mask)) {
-        const regex = getCharRegex(mask[0]) ;
-        if(typeof(regex) == "string")
-        throw new Error("Sólo se soportan caracters comidin en las mascaras de repetición");
-
-        return starMask(source, regex);
-    }
 
     let ret = source;
 
@@ -78,10 +76,10 @@ export function mask(source: InputState, mask: string): InputState {
     while (i < ret.text.length && maskPos < mask.length) {
         const sourceChar = ret.text[i];
         const maskChar = mask[maskPos];
-        const regex = getCharRegex(maskChar);
+        const regex = maskChar;
 
         const nextMaskChar = mask[maskPos + 1];
-        const nextRegex = getCharRegex(nextMaskChar);
+        const nextRegex = nextMaskChar;
 
         if (
             (typeof (regex) == "string") ? regex == sourceChar :
@@ -92,8 +90,7 @@ export function mask(source: InputState, mask: string): InputState {
             continue;
         }
         //El caracter no encaja, si es fijo, se inserta a la cadena
-        const fijo = typeof (regex) == "string";
-        if (fijo) {
+        if (typeof (regex) == "string") {
             if (sourceChar == " ") {
                 const nextSourceChar = ret.text[i + 1];
                 if (nextSourceChar == maskChar) {
@@ -101,7 +98,7 @@ export function mask(source: InputState, mask: string): InputState {
                     ret = insert(ret, maskChar, i, false);
                     maskPos++;
                 } else {
-                    ret = insert(ret, maskChar, i, true);
+                    ret = insert(ret, regex, i, true);
                     maskPos++;
                 }
                 i++;
@@ -113,7 +110,7 @@ export function mask(source: InputState, mask: string): InputState {
                     ret = remove(ret, i, 1);
 
                 } else {
-                    ret = insert(ret, maskChar, i, true);
+                    ret = insert(ret, regex, i, true);
                     maskPos++;
                     i++;
                 }
@@ -157,14 +154,13 @@ export function mask(source: InputState, mask: string): InputState {
     //Poner todos los fijos que faltan:
     while (!preventAppendMask && (maskPos < mask.length)) {
         const maskChar = mask[maskPos];
-        const regex = getCharRegex(maskChar);
-        const fijo = typeof (regex) == "string";
-        if (!fijo) {
+        const regex = maskChar;
+        if (typeof (regex) != "string") {
             break;
         }
 
         //No queremos que se mueva el cursor
-        ret = insert(ret, maskChar, ret.text.length, true);
+        ret = insert(ret, regex, ret.text.length, true);
         maskPos++;
         i++;
     }
