@@ -6,22 +6,28 @@ import { MaskItem } from "./regex-mask";
 const mask: MaskItem[] = [
     {
         mask: /\d?/,
-        str: " "
+        str: " ",
+        after: true
     }, {
         mask: /\d?/,
-        str: " "
+        str: " ",
+        after: true
     }, {
         mask: /\d?/,
-        str: " "
+        str: " ",
+        after: true
     },  {
         mask: /-?/,
-        str: "-"
+        str: "-",
+        after: true
     }, {
         mask: /[A-Z]?/,
-        str: " "
+        str: " ",
+        after: true
     }, {
         mask: /[A-Z]?/,
-        str: " "
+        str: " ",
+        after: true
     }
 ];
 

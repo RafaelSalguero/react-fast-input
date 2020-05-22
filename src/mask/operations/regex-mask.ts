@@ -8,6 +8,8 @@ export interface MaskItem {
     mask: RegExp;
     /**Si la mascara no encaja, que caracter insertar */
     str: string;
+    /**Si insertar con after */
+    after: boolean;
 }
 
 function testFull(patt: RegExp, str: string) {
@@ -41,7 +43,7 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
             if(!testFull(maskChar.mask, "")) {
                 ret = remove(ret, i, 1);
             }
-            ret = insert(ret, maskChar.str, i, true);
+            ret = insert(ret, maskChar.str, i, maskChar.after);
 
             i += maskChar.str.length;
         }
@@ -58,7 +60,7 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
         const maskChar = mask[maskPos];
 
         const rep = maskChar.str;
-        ret = insert(ret, rep, ret.text.length, true);
+        ret = insert(ret, rep, ret.text.length, maskChar.after);
         maskPos++;
         i += rep.length;
     }

@@ -2,11 +2,24 @@ import { InputState } from "./types";
 import { findAll, getReplaceAllIndices, ReplaceIndex } from "simple-pure-utils";
 import * as ops from "./basic";
 
+/**Quita las primeras apariciones de 'char' */
+export function trimLeft(source: InputState, char: string): InputState {
+    if (char.length == 0)
+        throw new Error("char length");
+
+    let ret = source;
+    if(ret.text.startsWith(char)) {
+        ret = ops.remove(ret, 0, char.length);
+    }
+    return ret;
+}
+
+
 /**
  * En la cadena @param source, reemplaza la sección (@param index, @param len) con el texto @param replace
  * @param after Véase la descripción en @see insert
  */
-export function replateAt(source: InputState, index: number, len: number, replace: string, after: boolean  ): InputState {
+export function replateAt(source: InputState, index: number, len: number, replace: string, after: boolean): InputState {
     let ret = source;
     ret = ops.remove(ret, index, len);
     ret = ops.insert(ret, replace, index, after);
@@ -18,7 +31,7 @@ export function replateAt(source: InputState, index: number, len: number, replac
  * Reemplaza todas las apariciones de un regex o cadena
  * @param after Véase la descripción en @see insert
  */
-export function replaceAll(source: InputState, pattern: RegExp | string, replace: string, after: boolean ): InputState {
+export function replaceAll(source: InputState, pattern: RegExp | string, replace: string, after: boolean): InputState {
     const all = findAll(source.text, pattern);
     const replaces = all.map(x => {
         if (typeof (pattern) == "string") {
@@ -33,7 +46,7 @@ export function replaceAll(source: InputState, pattern: RegExp | string, replace
         const result = str.replace(pattern, replace);
 
         return {
-            ... x,
+            ...x,
             result: replace
         }
     });
@@ -46,7 +59,7 @@ export function replaceAll(source: InputState, pattern: RegExp | string, replace
 
 
     let ret: InputState = source;
-    for(var i = 0; i < replaces.length; i++) {
+    for (var i = 0; i < replaces.length; i++) {
         const ix = indices[i];
         const rep = replaces[i];
 

@@ -10,11 +10,13 @@ test("num 1", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d/,
-            str: ""
+            str: "",
+            after: true
         },
         {
             mask: /\d/,
-            str: ""
+            str: "",
+            after: true
         }
     ];
 
@@ -37,7 +39,8 @@ test("num N 1", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d{1,3}/,
-            str: ""
+            str: "",
+            after: true
         },
     ];
 
@@ -59,10 +62,12 @@ test("num N 2", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d{1,3}/,
-            str: ""
+            str: "",
+            after: true
         }, {
             mask: /\d{1,3}/,
-            str: ""
+            str: "",
+            after: true
         }
     ];
 
@@ -84,10 +89,12 @@ test("num dot 1", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }, {
             mask: /\./,
-            str: "."
+            str: ".",
+            after: true
         },
     ];
 
@@ -109,10 +116,12 @@ test("num dot 2", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }, {
             mask: /\./,
-            str: "."
+            str: ".",
+            after: true
         },
     ];
 
@@ -134,13 +143,16 @@ test("num dot 3", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }, {
             mask: /\./,
-            str: "."
+            str: ".",
+            after: true
         }, {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }
     ];
 
@@ -162,13 +174,16 @@ test("num dot 4", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }, {
             mask: /\./,
-            str: "."
+            str: ".",
+            after: true
         }, {
             mask: /\d+/,
-            str: "0"
+            str: "0",
+            after: true
         }
     ];
 
@@ -190,13 +205,16 @@ test("num space 1", () => {
     const mask: MaskItem[] = [
         {
             mask: /\d/,
-            str: " "
+            str: " ",
+            after: true
         }, {
             mask: /\d/,
-            str: " "
+            str: " ",
+            after: true
         }, {
             mask: /\d/,
-            str: " "
+            str: " ",
+            after: true
         },
     ];
 

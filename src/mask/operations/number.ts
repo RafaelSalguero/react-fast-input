@@ -1,5 +1,5 @@
 import { InputState } from "./types";
-import { replaceAll } from "./replace";
+import { replaceAll, trimLeft } from "./replace";
 import { MaskItem, regexMask } from "./regex-mask";
 
 interface NumberMaskOptions {
@@ -27,11 +27,14 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
     //Quitar las commas:
     let ret = num;
     ret = replaceAll(ret, /,/, "", false);
+    //Quita los ceros a la izquierda:
+    ret = trimLeft(ret, "0");
 
     const split = ret.text.split(".");
-    const intLen = Math.max(split[0]?.length ?? 0, opt.int);
-    const fracLen = split[1]?.length ?? 0;
-
+    const fracLen = split[1]?.length;
+    const intLen = Math.max(
+        (split[0]?.length ?? 0) - (fracLen == undefined ? opt.frac : 0)
+        , opt.int);
 
     const groupLen = 3;
     const firstGroupLen = intLen % groupLen;
@@ -41,43 +44,59 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
 
     const firstZero = intLen - opt.int;
     let currDigit = 0;
-    const addDigit = () => {
+    const addInt = () => {
+        const zeroPad = currDigit >= firstZero;
         mask.push({
             mask: /\d?/,
-            str: currDigit >= firstZero ? "0" : ""
+            str: zeroPad ? "0" : "",
+            after: !zeroPad
         });
         currDigit++;
     };
 
-    const addDigits = (n: number) => {
+    const addFrac = () => {
+        mask.push({
+            mask: /\d/,
+            str: "0",
+            after: true
+        });
+    }
+
+    const addInts = (n: number) => {
         for (let i = 0; i < n; i++) {
-            addDigit();
+            addInt();
         }
     }
 
-    addDigits(firstGroupLen);
+    const addFracs = (n: number) => {
+        for (let i = 0; i < n; i++) {
+            addFrac();
+        }
+    }
+
+    addInts(firstGroupLen);
 
     for (let i = 0; i < fullLenGroups; i++) {
         if (currDigit > 0 && opt.thousandSep) {
             mask.push({
                 mask: /,?/,
-                str: ","
+                str: ",",
+                after: true
             });
         }
 
-        addDigits(groupLen);
+        addInts(groupLen);
     }
 
     if (opt.frac > 0) {
         mask.push({
-            mask: /\./,
-            str: "."
+            mask: /\.?/,
+            str: ".",
+            after: true
         });
 
-        addDigits(opt.frac);
+        addFracs(opt.frac);
     }
-
-    console.log(mask);
 
     return regexMask(ret, mask);
 }
