@@ -1,7 +1,7 @@
 import * as React from "react";
 import { InitialFastInputOptions } from "./logic";
 import { FastInputMultiElement, OnMaskFunction, BaseFastInputProps,  FastInputElementType } from "./view";
-import { onMaskNumber  } from "./mask/operations/number";
+export  { onMaskNumber  } from "./mask/operations/number";
 
 type HTMLInputProps = Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">;
 type HTMLTextAreaProps = Omit<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, "ref">;
