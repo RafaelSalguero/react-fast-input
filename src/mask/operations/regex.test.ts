@@ -33,7 +33,6 @@ test("num 1", () => {
 });
 
 
-/*
 test("num N 1", () => {
     const mask: MaskItem[] = [
         {
@@ -99,7 +98,7 @@ test("num dot 1", () => {
 
     const expected: InputState = {
         text: "12.",
-        cursor: 3
+        cursor: 2
     };
 
     const actual = ops.regexMask(source, mask);
@@ -208,11 +207,10 @@ test("num space 1", () => {
 
     const expected: InputState = {
         text: "12 ",
-        cursor: 3
+        cursor: 2
     };
 
     const actual = ops.regexMask(source, mask);
     expect(actual).toEqual(expected);
 });
 
-*/

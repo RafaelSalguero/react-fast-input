@@ -36,8 +36,12 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
             maskPos++;
         } else {
             //La ultima mascara no encajó
-            ret = remove(ret, i, 1);
-            ret = insert(ret, maskChar.str, i, false);
+
+            //Checar si la ultima encaja con una cadena vacía:
+            if(!testFull(maskChar.mask, "")) {
+                ret = remove(ret, i, 1);
+            }
+            ret = insert(ret, maskChar.str, i, true);
 
             i += maskChar.str.length;
         }
@@ -48,7 +52,7 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
         maskPos++;
     }
 
-
+    
     //Poner los fijos que faltan:
     while (maskPos < mask.length) {
         const maskChar = mask[maskPos];
@@ -63,6 +67,8 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
     if (i < ret.text.length) {
         ret = remove(ret, i, ret.text.length - i);
     }
+
+    
 
     return ret;
 }
