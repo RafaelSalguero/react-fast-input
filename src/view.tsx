@@ -70,7 +70,6 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
     /**True para colorear el input cuando cambie de color */
     testMode: boolean = false;
 
-
     handleRef = (ref: RefType) => {
         if (this.input != ref) {
             callRef(this.props.innerRef, ref);
@@ -133,8 +132,9 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
         if (next.effect == null)
             return;
 
-        //Si el value es undefined lo consideramos como no controlado
-        if (this.props.value !== undefined) {
+        //Si el value y onChange es undefined lo consideramos como no controlado
+        const uncontrolled = this.props.value == undefined && this.props.onChange == undefined;
+        if (!uncontrolled) {
             execReduceAction(this.logicState, next.effect, this.getReduceActionData, this.dispatch, this.waitForStateUpdate);
         }
     }
