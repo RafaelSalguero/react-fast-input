@@ -6,16 +6,17 @@ export  { onMaskNumber  } from "./mask/operations/number";
 type HTMLInputProps = Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">;
 type HTMLTextAreaProps = Omit<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, "ref">;
 
-interface RefProp {
-    ref?: React.Ref<FastInputElementType>;
+interface RefProp <T extends HTMLElement>{
+    ref?: React.Ref<T >;
 }
 
-interface InputProps extends Omit<HTMLInputProps, "onChange">, InitialFastInputOptions, BaseFastInputProps, RefProp {
+
+interface InputProps extends Omit<HTMLInputProps, "onChange">, InitialFastInputOptions, BaseFastInputProps, RefProp<HTMLInputElement> {
     value?: string;
 }
 
 
-interface TextAreaProps extends Omit<HTMLInputProps, "onChange">, InitialFastInputOptions, BaseFastInputProps, RefProp {
+interface TextAreaProps extends Omit<HTMLInputProps, "onChange">, InitialFastInputOptions, BaseFastInputProps, RefProp<HTMLTextAreaElement> {
     value?: string;
 }
 
