@@ -91,7 +91,7 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         addInts(groupLen);
     }
 
-    if (opt.frac > 0 || opt.dot) {
+    if (opt.frac > 0) {
         mask.push({
             mask: /\.?/,
             str: ".",
@@ -99,6 +99,12 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         });
 
         addFracs(opt.frac);
+    } else if (opt.frac == 0 && opt.dot) {
+        mask.push({
+            mask: /\.?/,
+            str: ".",
+            after: false
+        });
     }
 
     return regexMask(ret, mask);
