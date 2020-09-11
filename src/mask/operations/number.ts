@@ -9,6 +9,8 @@ interface NumberMaskOptions {
     int: number;
     /**Cantidad de ceros en la parte fraccionaria, por default es 2 */
     frac: number;
+    /**true para terminar con punto decimal incluso si @see frac == 0 */
+    dot: boolean;
 }
 
 function optionsDefault(options?: Partial<NumberMaskOptions>): NumberMaskOptions {
@@ -16,7 +18,8 @@ function optionsDefault(options?: Partial<NumberMaskOptions>): NumberMaskOptions
     const ret2 = {
         frac: ret.frac ?? 2,
         int: ret.int ?? 1,
-        thousandSep: ret.thousandSep ?? true
+        thousandSep: ret.thousandSep ?? true,
+        dot: ret.dot ?? false
     };
     return ret2;
 }
@@ -88,7 +91,7 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         addInts(groupLen);
     }
 
-    if (opt.frac > 0) {
+    if (opt.frac > 0 || opt.dot) {
         mask.push({
             mask: /\.?/,
             str: ".",

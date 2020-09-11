@@ -140,7 +140,7 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
     }
 
     componentDidUpdate(prevProps: Props) {
-        const propValueChanged = this.input!.value != this.props.value;
+        const propValueChanged = this.input!.value != this.props.value && (this.props.value != prevProps.value);
         if (propValueChanged) {
             this.dispatch({
                 type: "UserChange",
