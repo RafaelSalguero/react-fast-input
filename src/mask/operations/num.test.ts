@@ -93,20 +93,6 @@ test("num 3", () => {
     expect(actual).toEqual(expected);
 });
 
-test("num 4", () => {
-    const source: InputState = {
-        text: "",
-        cursor: 0
-    };
-
-    const expected: InputState = {
-        text: "0.00",
-        cursor: 1
-    };
-
-    const actual =  onMaskNumber(source);
-    expect(actual).toEqual(expected);
-});
 
 test("num 5", () => {
     const source: InputState = {
@@ -157,6 +143,9 @@ test("num 7", () => {
 });
 
 
+
+
+
 test("num 7.1", () => {
     const source: InputState = {
         text: ".1",
@@ -187,7 +176,7 @@ test("num 8", () => {
 
     const actual =  onMaskNumber(source, {
         int: 3,
-        frac: 0
+        frac: 0,
     });
     expect(actual).toEqual(expected);
 });

@@ -27,7 +27,7 @@ export function regexMask(source: InputState, backspace: boolean, mask: MaskItem
         const maskChar = mask[maskPos];
         const sourceChar = ret.text[i];
 
-        const nextMaskChar: MaskItem | undefined = mask[maskPos +1];
+        const nextMaskChar: MaskItem | undefined = mask[maskPos + 1];
         const nextSourceChar: string | undefined = ret.text[i + 1];
         curr += sourceChar;
         if (testFull(maskChar.mask, curr)) {
@@ -44,7 +44,7 @@ export function regexMask(source: InputState, backspace: boolean, mask: MaskItem
 
             //Checar si la ultima encaja con una cadena vacía:
             const nextMatches = nextMaskChar && nextSourceChar && testFull(nextMaskChar.mask, nextSourceChar);
-            if (!testFull(maskChar.mask, "") && !nextMatches ) {
+            if (!testFull(maskChar.mask, "") && !nextMatches) {
                 //Si el siguiente caracter encaja con la siguiente mascara, no lo sustituye, si no que lo "recorre"
                 ret = remove(ret, i, 1);
             }
@@ -65,8 +65,12 @@ export function regexMask(source: InputState, backspace: boolean, mask: MaskItem
     while (maskPos < mask.length) {
         const maskChar = mask[maskPos];
 
+
         const rep = maskChar.str;
-        ret = insert(ret, rep, ret.text.length, backspace ?  true: maskChar.after );
+        //Si esta parte de la mascara encaja con una cadena vacia, no la agrega
+        if(!testFull(maskChar.mask, "")) {
+            ret = insert(ret, rep, ret.text.length, backspace ? true : maskChar.after);
+        }
         maskPos++;
         i += rep.length;
     }

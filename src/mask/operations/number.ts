@@ -107,5 +107,6 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         });
     }
 
+    console.log(mask);
     return regexMask(ret, false, mask);
 }

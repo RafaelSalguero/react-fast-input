@@ -39,7 +39,7 @@ test("empty", () => {
     };
 
     const expected: InputState = {
-        text: "   -  ",
+        text: "",
         cursor: 0
     };
 
