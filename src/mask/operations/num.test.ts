@@ -144,22 +144,18 @@ test("num 7", () => {
 
 
 
-
-
-test("num 7.1", () => {
+test("num 4", () => {
     const source: InputState = {
-        text: ".1",
-        cursor: 2
+        text: "",
+        cursor: 0
     };
 
     const expected: InputState = {
-        text: "0.10",
-        cursor: 3
+        text: "0.00",
+        cursor: 1
     };
 
-    const actual =  onMaskNumber(source, {
-        thousandSep: false
-    });
+    const actual =  onMaskNumber(source);
     expect(actual).toEqual(expected);
 });
 

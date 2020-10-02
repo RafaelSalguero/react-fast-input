@@ -52,7 +52,8 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         mask.push({
             mask: /\d?/,
             str: zeroPad ? "0" : "",
-            after: !zeroPad
+            after: !zeroPad,
+            emptyFill: true
         });
         currDigit++;
     };
@@ -84,7 +85,8 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
             mask.push({
                 mask: /,?/,
                 str: ",",
-                after: true
+                after: true,
+                emptyFill: true
             });
         }
 
@@ -95,7 +97,8 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         mask.push({
             mask: /\.?/,
             str: ".",
-            after: true
+            after: true,
+            emptyFill: true
         });
 
         addFracs(opt.frac);
@@ -103,10 +106,10 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         mask.push({
             mask: /\.?/,
             str: ".",
-            after: false
+            after: false,
+            emptyFill: true
         });
     }
 
-    console.log(mask);
     return regexMask(ret, false, mask);
 }

@@ -10,6 +10,8 @@ export interface MaskItem {
     str: string;
     /**Si insertar con after */
     after: boolean;
+    /**True para rellenar con @see str incluso si la mascara encaja con una cadena vacia */
+    emptyFill?: boolean;
 }
 
 function testFull(patt: RegExp, str: string) {
@@ -68,7 +70,7 @@ export function regexMask(source: InputState, backspace: boolean, mask: MaskItem
 
         const rep = maskChar.str;
         //Si esta parte de la mascara encaja con una cadena vacia, no la agrega
-        if(!testFull(maskChar.mask, "")) {
+        if(maskChar.emptyFill || !testFull(maskChar.mask, "")) {
             ret = insert(ret, rep, ret.text.length, backspace ? true : maskChar.after);
         }
         maskPos++;
