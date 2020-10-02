@@ -5,6 +5,57 @@ import { MaskItem } from "./regex-mask";
 
 //TODO: Cuando se borre un caracter y mas adelante no haya ni separadores ni caracteres diferentes que se borre en lugar de poner un espacio
 
+test("credit card", () => {
+    //Format: ##-##
+    const mask: MaskItem[] = [
+        {
+            mask: /\d/,
+            str: " ",
+            after: true
+        },
+        {
+            mask: /\d/,
+            str: " ",
+            after: true
+        },
+        {
+            mask: /\-/,
+            str: "-",
+            after: false
+        },
+        {
+            mask: /\d/,
+            str: " ",
+            after: true
+        },
+        {
+            mask: /\d/,
+            str: " ",
+            after: true
+        },
+    ];
+
+    
+    const source: InputState = {
+        text: "12",
+        cursor: 2
+    };
+
+    const expected: InputState = {
+        text: "12-  ",
+        cursor: 3
+    };
+
+    const expectedBackspace: InputState = {
+        text: "12-  ",
+        cursor: 2
+    };
+
+    expect(ops.regexMask(source, false, mask)).toEqual(expected);
+    expect(ops.regexMask(source, true, mask)).toEqual(expectedBackspace);
+
+});
+
 test("num 1", () => {
     //##
     const mask: MaskItem[] = [
@@ -30,7 +81,7 @@ test("num 1", () => {
         cursor: 1
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -54,7 +105,7 @@ test("num N 1", () => {
         cursor: 3
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -81,7 +132,7 @@ test("num N 2", () => {
         cursor: 2
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -108,7 +159,7 @@ test("num dot 1", () => {
         cursor: 2
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -135,7 +186,7 @@ test("num dot 2", () => {
         cursor: 3
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -166,7 +217,7 @@ test("num dot 3", () => {
         cursor: 3
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -197,7 +248,7 @@ test("num dot 4", () => {
         cursor: 1
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -228,7 +279,7 @@ test("num space 1", () => {
         cursor: 2
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 

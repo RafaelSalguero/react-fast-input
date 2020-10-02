@@ -18,7 +18,7 @@ function testFull(patt: RegExp, str: string) {
     return r[0].length == str.length;
 }
 
-export function regexMask(source: InputState, mask: MaskItem[]): InputState {
+export function regexMask(source: InputState, backspace: boolean, mask: MaskItem[]): InputState {
     let i = 0, maskPos = 0;
 
     let curr = "";
@@ -40,10 +40,12 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
             //La ultima mascara no encajó
 
             //Checar si la ultima encaja con una cadena vacía:
-            if(!testFull(maskChar.mask, "")) {
+            if (!testFull(maskChar.mask, "")) {
                 ret = remove(ret, i, 1);
             }
-            ret = insert(ret, maskChar.str, i, maskChar.after);
+
+            //Inserta el caracter sólo si es una operación de agregado (si el usuario esta borrando no se inserta)
+            ret = insert(ret, maskChar.str, i, backspace ? true : maskChar.after);
 
             i += maskChar.str.length;
         }
@@ -54,13 +56,12 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
         maskPos++;
     }
 
-    
     //Poner los fijos que faltan:
     while (maskPos < mask.length) {
         const maskChar = mask[maskPos];
 
         const rep = maskChar.str;
-        ret = insert(ret, rep, ret.text.length, maskChar.after);
+        ret = insert(ret, rep, ret.text.length, backspace ?  true: maskChar.after );
         maskPos++;
         i += rep.length;
     }
@@ -70,7 +71,7 @@ export function regexMask(source: InputState, mask: MaskItem[]): InputState {
         ret = remove(ret, i, ret.text.length - i);
     }
 
-    
+
 
     return ret;
 }

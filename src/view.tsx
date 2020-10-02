@@ -18,7 +18,7 @@ interface InputProps extends Pick<React.DetailedHTMLProps<React.InputHTMLAttribu
  * el debounce del FastInput
  */
 export interface OnMaskFunction {
-    (state: InputState): InputState;
+    (state: InputState, backspace: boolean): InputState;
 }
 
 export interface BaseFastInputProps {
@@ -149,7 +149,7 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
         }
     }
 
-    applyMask = () => {
+    applyMask = (backspace: boolean) => {
         const input = this.input!;
         if (this.props.onMask) {
             //Si no tiene selección se considera al final del texto (como si se acabara de pegar el valor)
@@ -158,7 +158,7 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
                 text: input.value,
                 cursor: input.selectionEnd ?? input.value.length
             };
-            const nextState = this.props.onMask(initialState);
+            const nextState = this.props.onMask(initialState, backspace);
 
             const didChanged = !deepEquals(initialState, nextState);
 
@@ -174,7 +174,10 @@ class FastInputMultiElementInnerRef extends React.PureComponent<Props & InputRef
     }
 
     onInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        this.applyMask();
+
+        const inputType : string = (ev.nativeEvent as any).inputType ;
+            const backspace = inputType == "deleteContentBackward";
+        this.applyMask(backspace);
         this.dispatch({
             type: "UserChange",
             source: "ref"
