@@ -1,5 +1,7 @@
 import * as React from "react";
 import { InitialFastInputOptions } from "./logic";
+export { MaskItem } from "./mask/operations/regex-mask";
+export  { InputState } from "./mask/operations/types";
 import { FastInputMultiElement, OnMaskFunction, BaseFastInputProps, FastInputElementType } from "./view";
 export { onMaskNumber } from "./mask/operations/number";
 export { regexMask } from "./mask/operations/regex-mask";

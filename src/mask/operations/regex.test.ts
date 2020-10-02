@@ -5,57 +5,6 @@ import { MaskItem } from "./regex-mask";
 
 //TODO: Cuando se borre un caracter y mas adelante no haya ni separadores ni caracteres diferentes que se borre en lugar de poner un espacio
 
-test("credit card", () => {
-    //Format: ##-##
-    const mask: MaskItem[] = [
-        {
-            mask: /\d/,
-            str: " ",
-            after: true
-        },
-        {
-            mask: /\d/,
-            str: " ",
-            after: true
-        },
-        {
-            mask: /\-/,
-            str: "-",
-            after: false
-        },
-        {
-            mask: /\d/,
-            str: " ",
-            after: true
-        },
-        {
-            mask: /\d/,
-            str: " ",
-            after: true
-        },
-    ];
-
-    
-    const source: InputState = {
-        text: "12",
-        cursor: 2
-    };
-
-    const expected: InputState = {
-        text: "12-  ",
-        cursor: 3
-    };
-
-    const expectedBackspace: InputState = {
-        text: "12-  ",
-        cursor: 2
-    };
-
-    expect(ops.regexMask(source, false, mask)).toEqual(expected);
-    expect(ops.regexMask(source, true, mask)).toEqual(expectedBackspace);
-
-});
-
 test("num 1", () => {
     //##
     const mask: MaskItem[] = [
