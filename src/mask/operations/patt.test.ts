@@ -43,7 +43,7 @@ test("empty", () => {
         cursor: 0
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source,false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -59,7 +59,7 @@ test("none", () => {
         cursor: 0
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false,mask);
     expect(actual).toEqual(expected);
 });
 
@@ -74,7 +74,7 @@ test("delete num", () => {
         cursor: 2
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source,false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -90,7 +90,7 @@ test("insert no mask", () => {
         cursor: 6
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source,false, mask);
     expect(actual).toEqual(expected);
 });
 
@@ -106,6 +106,6 @@ test("delete space", () => {
         cursor: 0
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source,false, mask);
     expect(actual).toEqual(expected);
 });

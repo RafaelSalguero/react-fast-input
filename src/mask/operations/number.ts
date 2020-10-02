@@ -107,5 +107,5 @@ export function onMaskNumber(num: InputState, options?: Partial<NumberMaskOption
         });
     }
 
-    return regexMask(ret, mask);
+    return regexMask(ret, false, mask);
 }

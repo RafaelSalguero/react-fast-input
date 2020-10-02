@@ -43,7 +43,7 @@ test("raw 1", () => {
         cursor: 7
     };
 
-    const actual = ops.regexMask(source, mask);
+    const actual = ops.regexMask(source, false, mask);
     expect(actual).toEqual(expected);
 });
 
